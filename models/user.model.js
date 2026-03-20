@@ -21,6 +21,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    signUpMethod: {
+      type: String,
+      enum: ['phone', 'google', 'apple', 'facebook'],
+      default: 'phone',
+    },
+    onboardingComplete: {
+      type: Boolean,
+      default: false,
+    },
     otp: {
       code: { type: String, default: null },
       expiresAt: { type: Date, default: null },

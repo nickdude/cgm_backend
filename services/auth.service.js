@@ -11,7 +11,10 @@ const sendOTP = async (mobile) => {
   let user = await User.findOne({ mobile: normalizedMobile });
 
   if (!user) {
-    user = new User({ mobile: normalizedMobile });
+    user = new User({
+      mobile: normalizedMobile,
+      signUpMethod: 'phone',
+    });
   }
 
   const otp = generateOTP();
@@ -95,7 +98,10 @@ const verifyAppleLogin = async (identityToken, userDetails) => {
       email: userDetails.email || null,
       name: userDetails.name || null,
       profileImage: userDetails.profileImage || null,
+      signUpMethod: 'apple',
     });
+  } else {
+    user.signUpMethod = user.signUpMethod || 'apple';
   }
 
   user.lastLogin = new Date();
@@ -125,12 +131,14 @@ const verifyGoogleLogin = async (idToken, userDetails) => {
       email: userDetails.email,
       name: userDetails.name,
       profileImage: userDetails.profileImage || null,
+      signUpMethod: 'google',
     });
   } else {
     // Update user info if changed
     user.email = userDetails.email || user.email;
     user.name = userDetails.name || user.name;
     if (userDetails.profileImage) user.profileImage = userDetails.profileImage;
+    user.signUpMethod = user.signUpMethod || 'google';
   }
 
   user.lastLogin = new Date();
@@ -160,11 +168,13 @@ const verifyFacebookLogin = async (accessToken, userDetails) => {
       email: userDetails.email,
       name: userDetails.name,
       profileImage: userDetails.profileImage || null,
+      signUpMethod: 'facebook',
     });
   } else {
     user.email = userDetails.email || user.email;
     user.name = userDetails.name || user.name;
     if (userDetails.profileImage) user.profileImage = userDetails.profileImage;
+    user.signUpMethod = user.signUpMethod || 'facebook';
   }
 
   user.lastLogin = new Date();
