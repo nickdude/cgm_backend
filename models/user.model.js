@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    profileComplete: {
+      type: Boolean,
+      default: false,
+    },
     signUpMethod: {
       type: String,
       enum: ['phone', 'google', 'apple', 'facebook'],

@@ -7,6 +7,14 @@ const {
   validateSocialLogin,
 } = require('../validations/auth.validation');
 
+const buildAuthPayload = (result) => ({
+  ...result,
+  setupState: {
+    profileComplete: Boolean(result?.user?.profileComplete),
+    onboardingComplete: Boolean(result?.user?.onboardingComplete),
+  },
+});
+
 // Mobile OTP Login - Step 1: Send OTP
 const requestOTP = async (req, res, next) => {
   try {
@@ -42,7 +50,7 @@ const verifyOTPLogin = async (req, res, next) => {
 
     const result = await authService.verifyOTP(mobile, otp);
 
-    const response = new ApiResponse(200, 'Login successful', result);
+    const response = new ApiResponse(200, 'Login successful', buildAuthPayload(result));
 
     return res.status(200).json(response);
   } catch (error) {
@@ -66,7 +74,7 @@ const appleLogin = async (req, res, next) => {
 
     const result = await authService.verifyAppleLogin(identityToken, userDetails);
 
-    const response = new ApiResponse(200, 'Apple login successful', result);
+    const response = new ApiResponse(200, 'Apple login successful', buildAuthPayload(result));
 
     return res.status(200).json(response);
   } catch (error) {
@@ -90,7 +98,7 @@ const googleLogin = async (req, res, next) => {
 
     const result = await authService.verifyGoogleLogin(idToken, userDetails);
 
-    const response = new ApiResponse(200, 'Google login successful', result);
+    const response = new ApiResponse(200, 'Google login successful', buildAuthPayload(result));
 
     return res.status(200).json(response);
   } catch (error) {
@@ -114,7 +122,7 @@ const facebookLogin = async (req, res, next) => {
 
     const result = await authService.verifyFacebookLogin(accessToken, userDetails);
 
-    const response = new ApiResponse(200, 'Facebook login successful', result);
+    const response = new ApiResponse(200, 'Facebook login successful', buildAuthPayload(result));
 
     return res.status(200).json(response);
   } catch (error) {

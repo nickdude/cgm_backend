@@ -8,6 +8,7 @@ const mapUserProfile = (user) => ({
   fullName: user.name || '',
   photoUrl: user.profileImage || null,
   signUpMethod: user.signUpMethod || null,
+  profileComplete: Boolean(user.profileComplete),
   onboardingComplete: Boolean(user.onboardingComplete),
   createdAt: user.createdAt,
   updatedAt: user.updatedAt,
@@ -45,6 +46,9 @@ const updateProfileById = async (userId, updateData) => {
   }
 
   Object.assign(user, updateData);
+  user.profileComplete = Boolean(
+    user.name && (user.email || user.mobile)
+  );
   await user.save();
 
   return mapUserProfile(user);
