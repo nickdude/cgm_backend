@@ -3,6 +3,7 @@ const InsulinEntry = require('../models/insulinEntry.model');
 const MedicineEntry = require('../models/medicineEntry.model');
 const ExerciseEntry = require('../models/exerciseEntry.model');
 const FingerBloodEntry = require('../models/fingerBloodEntry.model');
+const { buildDashboardSummary } = require('./cgm_summary.service');
 
 const buildWeeklyData = () => [
   { day: 'W', value: 94 },
@@ -218,6 +219,11 @@ const buildEventTimeline = () => ({
 });
 
 const getDashboardByUserId = async (userId) => {
+  const summary = await buildDashboardSummary(userId);
+  if (summary) {
+    return summary;
+  }
+
   const seed = String(userId || 'guest')
     .split('')
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);

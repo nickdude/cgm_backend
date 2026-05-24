@@ -5,9 +5,13 @@ const connectDB = require('./configs/db');
 const startServer = async () => {
   await connectDB(env.mongoUri);
 
-  const server = app.listen(env.port, () => {
-    console.log(`🚀 Server running on http://localhost:${env.port}`);
+  const server = app.listen(5001, '0.0.0.0', () => {
+    console.log('Server running on port 5001');
   });
+
+  // const server = app.listen(env.port, () => {
+  //   console.log(`🚀 Server running on http://localhost:${env.port}`);
+  // });
 
   const shutdown = (signal) => {
     console.log(`\n${signal} received. Shutting down gracefully...`);
